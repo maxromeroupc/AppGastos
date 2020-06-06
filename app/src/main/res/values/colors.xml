@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1E196E</color>
+    <color name="colorPrimaryDark">#16125C</color>
+    <color name="colorAccent">#2E2977</color>
+
+    <color name="colorCardView">#fff</color>
+
+
+    <color name="primary_light">#FFE0B2</color>
+
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="icons">#212121</color>
+    <color name="divider">#BDBDBD</color>
+
+
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorTransparent">#99FFFFFF</color>
+
+</resources>

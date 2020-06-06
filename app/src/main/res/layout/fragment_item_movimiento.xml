@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dim_margin_bottom_item_cardview"
+    app:cardBackgroundColor="@color/colorCardView"
+    app:cardCornerRadius="@dimen/dim_radius_item_cardview"
+    >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dim_margin_item_cardview"
+            android:layout_marginRight="@dimen/dim_margin_item_cardview"
+            >
+
+                <ImageView
+                    android:id="@+id/imgIngresoGasto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"></ImageView>
+
+                <TextView
+                    android:id="@+id/txtDescripcion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Descripcion" />
+        </LinearLayout>
+                <LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dim_margin_item_cardview"
+                    android:layout_marginRight="@dimen/dim_margin_item_cardview"
+    >
+
+        <TextView
+            android:id="@+id/txtIdMovimiento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="IdMovimiento"
+            android:visibility="gone"
+            />
+
+                        <TextView
+            android:id="@+id/txtTipoMovimiento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="TipoMov"
+            android:visibility="gone"
+            />
+
+        <TextView
+            android:id="@+id/txtFechaMovimiento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Fecha" />
+
+                        <TextView
+            android:id="@+id/txtImporte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="numberDecimal"
+            android:text="Importe" />
+        <ImageButton
+            android:id="@+id/imbtnDeleteMov"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/trash_icon_red_24"
+            android:background="@drawable/trash_icon_red_24"
+            />
+
+</LinearLayout>
+
+</LinearLayout>
+
+</androidx.cardview.widget.CardView>

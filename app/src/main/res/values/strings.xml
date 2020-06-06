@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Gastos</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="mov_add_title">Registrar Movimiento</string>
+    <string name="mov_add_tipo_movimiento">Tipo Movimiento</string>
+    <string name="mov_add_fecha_movimiento">Fecha Movimiento</string>
+    <string name="mov_add_importe">Importe</string>
+    <string name="mov_list_listado_de_movimiento">Listado de Movimientos</string>
+    <string name="mov_add_ingreso">Ingreso</string>
+    <string name="mov_add_gasto">Gasto</string>
+    <string name="mov_add_entidad">Entidad</string>
+    <string name="ent_list_title">Lista de Entidades</string>
+    <string name="ent_add_registrar_entidad">Registrar Entidad</string>
+    <string name="ent_add_activo">Activo</string>
+    <string name="ent_add_inactivo">Inactivo</string>
+    <string name="ent_add_entidad">Entidad</string>
+    <string name="ent_add_fecha_registro">Fecha Registro</string>
+    <string name="mov_add_descripcion_movimiento">Descripcion Movimiento</string>
+</resources>

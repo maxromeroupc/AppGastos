@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    >
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/dim_margin_container"
+    >
+
+    <TextView
+        android:id="@+id/txtTitleAddMovimiento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/mov_add_title"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/dim_size_text_title"
+        android:textAlignment="center"
+        />
+    <TextView
+        android:id="@+id/txtSeparador2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dim_margin_bottom_separador_title"
+        android:background="@drawable/separador_title" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/mov_add_entidad"
+        android:textColor="@color/colorPrimaryDark"
+        >
+    </TextView>
+    <Spinner
+        android:id="@+id/spnEntidad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </Spinner>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/mov_add_tipo_movimiento"
+        android:textColor="@color/colorPrimaryDark"
+        >
+    </TextView>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <RadioButton
+            android:id="@+id/rdbIngreso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mov_add_ingreso"
+            android:textColor="@color/colorPrimaryDark"
+            >
+        </RadioButton>
+        <RadioButton
+            android:id="@+id/rdbGasto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mov_add_gasto"
+            android:textColor="@color/colorPrimaryDark"
+            >
+        </RadioButton>
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilFechaMovimiento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColorHint="@color/colorPrimaryDark">
+
+        <EditText
+            android:id="@+id/edtxtFechaMovimiento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/mov_add_fecha_movimiento"
+            android:inputType="datetime">
+        </EditText>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageButton
+        android:id="@+id/imbtnFechaMovimiento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/calendar_36"
+        android:src="@drawable/calendar_36"
+        />
+    </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilDescripcion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/colorPrimaryDark">
+
+        <EditText
+            android:id="@+id/edtxtDescripcion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/mov_add_descripcion_movimiento"
+            android:inputType="textPersonName">
+        </EditText>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilImporte"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/colorPrimaryDark">
+
+        <EditText
+            android:id="@+id/edtxtImporte"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/mov_add_importe"
+            android:inputType="numberDecimal">
+        </EditText>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
+
+        <ImageButton
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_save"
+            android:foreground="@drawable/btn_save" />
+    <ImageButton
+        android:id="@+id/btnCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_cancel"
+
+        />
+    </LinearLayout>
+</LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

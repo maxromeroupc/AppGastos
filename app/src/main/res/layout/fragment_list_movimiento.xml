@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/dim_margin_container"
+    >
+
+    <TextView
+        android:id="@+id/txtTitleListMovimiento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/dim_size_text_title"
+        android:textAlignment="center"
+        android:text="@string/mov_list_listado_de_movimiento" />
+
+    <TextView
+        android:id="@+id/txtSeparador2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dim_margin_bottom_separador_title"
+        android:background="@drawable/separador_title" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recListMovimiento"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            tools:listitem="@layout/fragment_item_movimiento"
+            />
+
+    </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddMovimiento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/add_plus_32"
+        />
+    </FrameLayout>
+    <TextView
+        android:id="@+id/txtResumen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:text="Resumen" />
+</LinearLayout>
