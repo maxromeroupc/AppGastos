@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import app.factory.appgastos.R;
 import app.factory.appgastos.adapter.MovimientoAdapter;
@@ -40,6 +41,8 @@ public class ListMovimientoFragment extends Fragment implements View.OnClickList
 
     private double gloTotalImporteIngreso, gloTotalImporteGasto ;
     private int gloCantidad;
+
+    private final int MODE_OPTION_EDIT = 2;
 
     public ListMovimientoFragment() {
         // Required empty public constructor
@@ -71,7 +74,7 @@ public class ListMovimientoFragment extends Fragment implements View.OnClickList
 
     private void setDefaultValues() {
         double saldo = gloTotalImporteIngreso - gloTotalImporteGasto;
-        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        DecimalFormat decimalFormat = new DecimalFormat("#,###.00");
         txtResumen.setText("Cant:" + gloCantidad + " - I:" + decimalFormat.format( gloTotalImporteIngreso )+
                 " - G:" + decimalFormat.format(gloTotalImporteGasto )
                 + " - S:" + decimalFormat.format(saldo) );
@@ -88,9 +91,10 @@ public class ListMovimientoFragment extends Fragment implements View.OnClickList
         Movimiento mov = null;
         MovimientoDbHelper movimientoDbHelper = new MovimientoDbHelper(getContext());
         SQLiteDatabase database = movimientoDbHelper.getReadableDatabase();
-        String sql = "SELECT IdMovimiento, m.IdEntidad, IdTipoMovimiento, FechaMovimiento, m.Descripcion, Importe " +
-                "FROM Movimiento m"
+        String sql = "SELECT IdMovimiento, m.IdEntidad, IdTipoMovimiento, FechaMovimiento, m.Descripcion, Importe, " +
+                " m.IdCategoria, Categoria FROM Movimiento m "
                 + " INNER JOIN Entidad e ON m.IdEntidad = e.IdEntidad "
+                + " LEFT JOIN Categoria c ON m.IdCategoria = c.IdCategoria "
                 + " WHERE e.Estado = 'A'";
 
         try {
@@ -102,6 +106,8 @@ public class ListMovimientoFragment extends Fragment implements View.OnClickList
                     mov.setIdMovimiento( cursor.getInt( cursor.getColumnIndex("IdMovimiento") ) );
                     mov.setIdEntidad( cursor.getInt( cursor.getColumnIndex("IdEntidad") ) );
                     mov.setIdTipoMovimiento( cursor.getInt( cursor.getColumnIndex("IdTipoMovimiento") ) );
+                    mov.setIdCategoria( cursor.getInt( cursor.getColumnIndex("IdCategoria") ) );
+                    mov.setCategoria( cursor.getString( cursor.getColumnIndex("Categoria") ) );
                     mov.setFechaMovimiento( strToDate( cursor.getString( cursor.getColumnIndex("FechaMovimiento") ) ) );
                     mov.setDescripcion( cursor.getString( cursor.getColumnIndex("Descripcion") )  );
                     mov.setImporte( cursor.getDouble( cursor.getColumnIndex("Importe") ) );
@@ -121,6 +127,11 @@ public class ListMovimientoFragment extends Fragment implements View.OnClickList
         }
 
         return lstMov;
+    }
+
+    private String formatMonto(double monto){
+        DecimalFormat decimalFormat = new DecimalFormat("#,###.00");
+        return decimalFormat.format(monto);
     }
 
     private Date strToDate(String strDate){
@@ -148,6 +159,19 @@ public class ListMovimientoFragment extends Fragment implements View.OnClickList
         gloTotalImporteGasto = 0;
         recyListMovimiento();
         setDefaultValues();
+    }
+
+    public void goToEditMovimiento(int idMovimiento ){
+        Bundle bundle = new Bundle();
+        bundle.putInt( "idMovimiento", idMovimiento);
+        bundle.putInt("optionMode", MODE_OPTION_EDIT);
+        AddMovimientoFragment addMovimientoFragment = new AddMovimientoFragment();
+        addMovimientoFragment.setArguments(bundle);
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace( R.id.frameMain, addMovimientoFragment ).commit() ;
+        //Toast.makeText( getContext() , "Editar " + idMovimiento, Toast.LENGTH_SHORT).show();
     }
 
 }

@@ -4,7 +4,7 @@
     >
 
     <item
-        android:id="@+id/ListMovientos"
+        android:id="@+id/ListMovimientos"
         android:icon="@drawable/sale_icon_red_48"
         android:title="Movimientos"
         app:showAsAction="always"></item>
@@ -17,10 +17,9 @@
         app:showAsAction="always"></item>
 
     <item
-        android:id="@+id/List"
-        android:title="Opcional"
-        android:icon="@drawable/cash_icon_48"
-        android:visible="false"
+        android:id="@+id/ListCategoria"
+        android:title="Categoria"
+        android:icon="@drawable/type_48"
         app:showAsAction="always"></item>
 
 </menu>

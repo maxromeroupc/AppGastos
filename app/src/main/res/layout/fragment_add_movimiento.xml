@@ -71,6 +71,18 @@
             >
         </RadioButton>
     </RadioGroup>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/mov_add_categoria"
+        android:textColor="@color/colorPrimaryDark"
+        >
+    </TextView>
+    <Spinner
+        android:id="@+id/spnCategoria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </Spinner>
 
     <LinearLayout
         android:layout_width="match_parent"

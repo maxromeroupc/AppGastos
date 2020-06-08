@@ -1,8 +1,10 @@
 package app.factory.appgastos.views;
 
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -27,7 +29,9 @@ import android.widget.Toast;
 import app.factory.appgastos.R;
 import app.factory.appgastos.datos.GastosDB;
 import app.factory.appgastos.datos.MovimientoDbHelper;
+import app.factory.appgastos.entidad.Categoria;
 import app.factory.appgastos.entidad.Entidad;
+import app.factory.appgastos.entidad.Movimiento;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,54 +45,40 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class AddMovimientoFragment extends Fragment implements View.OnClickListener {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
 
     public AddMovimientoFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AddMovimientoFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static AddMovimientoFragment newInstance(String param1, String param2) {
         AddMovimientoFragment fragment = new AddMovimientoFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     private TextView txtTitleMovimiento;
     private EditText edtxtFechaMovimiento, edtxtImporte, edtxtDescripcionMovimiento;
     private RadioButton rdbIngreso, rdbGasto;
-    private Spinner spnEntidad;
+    private Spinner spnEntidad, spnCategoria;
     private ImageButton imbtnFechaMovimiento, btnSave, btnCancel;
 
+    private int gloIdMovimiento = 0, gloOptionMode = 1, gloIdEntidad = 0, gloIdCategoria = 0,
+            gloPositionCategoria = 0;
+    private final int MODE_OPTION_ADD = 1;
+    private final int MODE_OPTION_EDIT = 2;
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if(getArguments() != null){
+            gloIdMovimiento = getArguments().getInt("idMovimiento");
+            gloOptionMode = getArguments().getInt("optionMode");
+        }
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -103,6 +93,7 @@ public class AddMovimientoFragment extends Fragment implements View.OnClickListe
         rdbIngreso = view.findViewById(R.id.rdbIngreso);
         rdbGasto = view.findViewById(R.id.rdbGasto);
         spnEntidad = view.findViewById(R.id.spnEntidad);
+        spnCategoria = view.findViewById(R.id.spnCategoria);
         btnSave = view.findViewById(R.id.btnSave);
         btnCancel = view.findViewById(R.id.btnCancel);
 
@@ -110,10 +101,12 @@ public class AddMovimientoFragment extends Fragment implements View.OnClickListe
         btnCancel.setOnClickListener(this);
         imbtnFechaMovimiento.setOnClickListener(this);
 
-        setSpnEntidad();
         setDefaultValues();
+
         return view;
     }
+
+
 
     @Override
     public void onClick(View v) {
@@ -151,8 +144,17 @@ public class AddMovimientoFragment extends Fragment implements View.OnClickListe
 
     //region Procedures and Functions
     private void setDefaultValues() {
-        rdbGasto.setChecked(true);
         setDateMovimiento();
+        if( gloOptionMode == MODE_OPTION_ADD){
+            rdbGasto.setChecked(true);
+        }else{
+            txtTitleMovimiento.setText("Editar Movimiento");
+            setInfoMovimiento();
+        }
+
+        setSpnEntidad();
+        setSpnCategory();
+
     }
 
     private void setDateMovimiento() {
@@ -174,6 +176,15 @@ public class AddMovimientoFragment extends Fragment implements View.OnClickListe
         ArrayAdapter<Entidad> arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, lstEntidad);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnEntidad.setAdapter(arrayAdapter);
+        //spnEntidad.setSelection(gloIdEntidad);
+    }
+
+    private void setSpnCategory() {
+        List<Categoria> lstCategoria = listCategoria();
+        ArrayAdapter<Categoria> arrayAdapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_spinner_dropdown_item,lstCategoria);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnCategoria.setAdapter(arrayAdapter);
+        spnCategoria.setSelection(gloPositionCategoria);
     }
 
     private List<Entidad> listEntidad(){
@@ -201,11 +212,54 @@ public class AddMovimientoFragment extends Fragment implements View.OnClickListe
         return lstEntidad;
     }
 
+    private List<Categoria> listCategoria(){
+        List<Categoria> lstCategoria = new ArrayList<>();
+        Categoria categoria = null;
+        MovimientoDbHelper movDB = new MovimientoDbHelper(this.getContext());
+        SQLiteDatabase database = movDB.getReadableDatabase();
+
+        try {
+            Cursor curCate = database.rawQuery("SELECT IdCategoria, Categoria FROM CATEGORIA WHERE Estado = ?",
+                    new String[]{"A"});
+            if(curCate.moveToFirst()){
+                do {
+                    categoria = new Categoria();
+                    categoria.setIdCategoria( curCate.getInt( curCate.getColumnIndex("IdCategoria")) );
+                    categoria.setCategoria( curCate.getString( curCate.getColumnIndex("Categoria") ) );
+                    if( gloIdCategoria == categoria.getIdCategoria()){
+                        gloPositionCategoria = curCate.getPosition();
+                    }
+                    lstCategoria.add(categoria);
+                }while(curCate.moveToNext());
+            }
+
+        }catch( Exception e){
+            Log.e("Error list mov","Error listar categoria. " + e.getMessage());
+        }
+        return lstCategoria;
+    }
+
     private void registMovimiento() {
         String msgValidacion = validarRegistro();
         if(msgValidacion.equalsIgnoreCase("")) {
             saveMovimiento();
             goToListMovimiento();
+            /* Mensaje de confirmacion
+            AlertDialog.Builder alertConfirmBuilder = new AlertDialog.Builder(getContext());
+            alertConfirmBuilder.setTitle("Confirmación")
+                    .setMessage("¿Seguro de guardar el registro?")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            saveMovimiento();
+                            goToListMovimiento();
+                        }
+                    })
+                    .setNegativeButton("Cancel", null);
+            AlertDialog alertConfirm = alertConfirmBuilder.create();
+            alertConfirm.show();
+
+             */
         }else{
             Toast.makeText(getContext(), msgValidacion, Toast.LENGTH_SHORT).show();
         }
@@ -238,11 +292,12 @@ public class AddMovimientoFragment extends Fragment implements View.OnClickListe
         MovimientoDbHelper movimientoDbHelper = new MovimientoDbHelper(getContext());
         SQLiteDatabase database = movimientoDbHelper.getWritableDatabase();
 
-        int idTipoMovimiento = 0, idEntidad;
+        int idTipoMovimiento = 0, idEntidad, idCategoria;
         String fechaMovimiento, descripcionMovimiento;
         double importe;
 
         idEntidad = ((Entidad) spnEntidad.getSelectedItem()).getIdEntidad();
+        idCategoria = ((Categoria) spnCategoria.getSelectedItem()).getIdCategoria();
         if (rdbIngreso.isChecked()) {
             idTipoMovimiento = 1;
         } else if (rdbGasto.isChecked()) {
@@ -255,13 +310,55 @@ public class AddMovimientoFragment extends Fragment implements View.OnClickListe
 
         ContentValues values = new ContentValues();
         values.put(GastosDB.GastosColumnsDB.IdEntidad, idEntidad);
+        values.put(GastosDB.GastosColumnsDB.IdCategoria, idCategoria);
         values.put(GastosDB.GastosColumnsDB.IdTipoMovimiento, idTipoMovimiento);
         values.put(GastosDB.GastosColumnsDB.FechaMovimiento, fechaMovimiento);
         values.put(GastosDB.GastosColumnsDB.Descripcion,descripcionMovimiento);
         values.put(GastosDB.GastosColumnsDB.Importe, importe);
-        database.insert(GastosDB.GastosColumnsDB.TABLE_NAME_MOVIMIENTO, null, values);
+        if( gloOptionMode == MODE_OPTION_ADD){
+            database.insert(GastosDB.GastosColumnsDB.TABLE_NAME_MOVIMIENTO, null, values);
+        }else if(gloOptionMode == MODE_OPTION_EDIT){
+            database.update(GastosDB.GastosColumnsDB.TABLE_NAME_MOVIMIENTO,
+                    values,
+                    "IdMovimiento=?", new String[]{ String.valueOf(gloIdMovimiento)} );
+        }
         database.close();
 
+    }
+
+    private void setInfoMovimiento(){
+        listMovimiento( gloIdMovimiento);
+    }
+
+    //Lista los datos del movimiento a editar
+    private void listMovimiento(int idMovimiento) {
+        MovimientoDbHelper ventasDbHelper = new MovimientoDbHelper(getContext());
+        SQLiteDatabase db = ventasDbHelper.getReadableDatabase();
+        Cursor curMov = db.rawQuery("SELECT IdMovimiento, m.IdEntidad, IdTipoMovimiento, FechaMovimiento, m.Descripcion, Importe, "
+                        + " m.IdCategoria FROM Movimiento m where IdMovimiento=?",
+                new String[]{String.valueOf(idMovimiento)});
+        //Log.e("Msg Movimiento",String.valueOf( curMov.getCount() ));
+        try {
+            if (curMov.moveToFirst()) {
+                String idTipoMovimiento = curMov.getString(curMov.getColumnIndex("IdTipoMovimiento"));
+                int idCategoria = curMov.getInt(curMov.getColumnIndex("IdCategoria"));
+                gloIdEntidad = 0; // por ahora solo hay 1 entidad de consulta
+                gloIdCategoria = idCategoria;
+
+                if (idTipoMovimiento.equalsIgnoreCase("I")) {
+                    rdbIngreso.setChecked(true);
+                } else {
+                    rdbGasto.setChecked(true);
+                }
+                edtxtDescripcionMovimiento.setText(curMov.getString(curMov.getColumnIndex("Descripcion")));
+                edtxtFechaMovimiento.setText(curMov.getString(curMov.getColumnIndex("FechaMovimiento")));
+                edtxtImporte.setText(String.valueOf(curMov.getInt(curMov.getColumnIndex("Importe"))));
+            }
+            db.close();
+        } catch (Exception ex) {
+            db.close();
+            ex.printStackTrace();
+        }
     }
 
     private void goToListMovimiento(){

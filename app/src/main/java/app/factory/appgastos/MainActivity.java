@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import app.factory.appgastos.R;
 
+import app.factory.appgastos.views.ListCategoriaFragment;
 import app.factory.appgastos.views.ListEntidadFragment;
 import app.factory.appgastos.views.ListMovimientoFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private BottomNavigationView btnNavMenu;
     private Toolbar toolbar;
+    FragmentManager fragmentManager = getSupportFragmentManager() ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +38,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int idItem = menuItem.getItemId();
         switch(idItem){
-            case R.id.ListMovientos:
+            case R.id.ListMovimientos:
                 goToListMovimiento();
                 break;
             case R.id.ListEntidad:
                 goToListEntidad();
+                break;
+            case R.id.ListCategoria:
+                goToListCategoria();
                 break;
         }
         return true;
@@ -49,17 +54,20 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private void goToListMovimiento(){
         ListMovimientoFragment listMovimientoFragment = new ListMovimientoFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager() ;
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace( R.id.frameMain, listMovimientoFragment).commit();
     }
 
     private void goToListEntidad(){
         ListEntidadFragment listEntidadFragment = new ListEntidadFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager() ;
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace( R.id.frameMain, listEntidadFragment).commit();
     }
 
+    private void goToListCategoria(){
+        ListCategoriaFragment listCategoriaFragment = new ListCategoriaFragment();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace( R.id.frameMain, listCategoriaFragment).commit();
+    }
 
 }

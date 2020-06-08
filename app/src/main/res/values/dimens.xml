@@ -6,5 +6,6 @@
     <dimen name="dim_margin_bottom_item_cardview">1dp</dimen>
     <dimen name="dim_margin_bottom_separador_title">0dp</dimen>
     <dimen name="dim_size_text_title">20sp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 
 </resources>

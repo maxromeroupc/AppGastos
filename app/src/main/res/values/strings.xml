@@ -18,4 +18,10 @@
     <string name="ent_add_entidad">Entidad</string>
     <string name="ent_add_fecha_registro">Fecha Registro</string>
     <string name="mov_add_descripcion_movimiento">Descripcion Movimiento</string>
+    <string name="mov_add_categoria">Categoria</string>
+    <string name="cat_list_categorias">Lista de Categorias</string>
+    <string name="cat_add_registrar_categoria">Registrar Categoria</string>
+    <string name="cat_add_categoria">Categoria</string>
+    <string name="cat_add_activo">Activo</string>
+    <string name="cat_add_inactivo">Inactivo</string>
 </resources>

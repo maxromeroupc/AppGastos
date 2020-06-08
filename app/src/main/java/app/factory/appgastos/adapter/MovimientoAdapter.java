@@ -1,5 +1,7 @@
 package app.factory.appgastos.adapter;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,10 +54,13 @@ public class MovimientoAdapter extends RecyclerView.Adapter<MovimientoAdapter.Vi
         holder.txtFechaMovimiento.setText( dateToString( lstMovimiento.get(position).getFechaMovimiento()) );
         holder.txtImporte.setText( decimalToString( lstMovimiento.get(position).getImporte() ) );
         holder.txtDescripcion.setText( String.valueOf( lstMovimiento.get(position).getDescripcion() ) );
+        holder.txtCategoria.setText( lstMovimiento.get(position).getCategoria()  );
         if ( lstMovimiento.get(position).getIdTipoMovimiento() == 1 ) {
             holder.imgIngresoGasto.setImageResource(R.drawable.add_green_16);
+            holder.imgIngresoGasto.setBackgroundResource(R.drawable.add_green_16);
         }else{
             holder.imgIngresoGasto.setImageResource(R.drawable.minus_red_16);
+            holder.imgIngresoGasto.setBackgroundResource(R.drawable.minus_red_16);
         }
     }
 
@@ -78,7 +83,7 @@ public class MovimientoAdapter extends RecyclerView.Adapter<MovimientoAdapter.Vi
 
     private String decimalToString(double val){
         String strVal = "";
-        DecimalFormat decimalFormat = new DecimalFormat("##.00");
+        DecimalFormat decimalFormat = new DecimalFormat("#,###.00");
         strVal = decimalFormat.format(val);
         return strVal;
     }
@@ -87,8 +92,9 @@ public class MovimientoAdapter extends RecyclerView.Adapter<MovimientoAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public Movimiento oMovimiento;
-        private TextView txtIdMovimiento, txtTipoMovimiento, txtFechaMovimiento, txtImporte, txtDescripcion;
-        private ImageButton imbtnDeleteMov;
+        private TextView txtIdMovimiento, txtTipoMovimiento, txtFechaMovimiento,
+                txtImporte, txtDescripcion, txtCategoria;
+        private ImageButton imbtnDeleteMov, imbtnEditMov;
         private ImageView imgIngresoGasto;
 
         public ViewHolder(@NonNull View itemView) {
@@ -99,9 +105,12 @@ public class MovimientoAdapter extends RecyclerView.Adapter<MovimientoAdapter.Vi
             txtFechaMovimiento = itemView.findViewById(R.id.txtFechaMovimiento);
             txtImporte = itemView.findViewById(R.id.txtImporte);
             txtDescripcion = itemView.findViewById(R.id.txtDescripcion);
+            txtCategoria = itemView.findViewById(R.id.txtCategoria);
             imbtnDeleteMov = itemView.findViewById(R.id.imbtnDeleteMov);
+            imbtnEditMov = itemView.findViewById(R.id.imbtnEditMov);
             imgIngresoGasto = itemView.findViewById(R.id.imgIngresoGasto);
             imbtnDeleteMov.setOnClickListener(this);
+            imbtnEditMov.setOnClickListener(this);
         }
 
         @Override
@@ -109,10 +118,29 @@ public class MovimientoAdapter extends RecyclerView.Adapter<MovimientoAdapter.Vi
             int id = v.getId();
             switch(id){
                 case R.id.imbtnDeleteMov:
-                    deleteMovimiento();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext());
+                    builder.setTitle("Confirmación")
+                            .setMessage("¿Seguro que desea eliminar el movimiento?")
+                            .setPositiveButton("SI", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    deleteMovimiento();
+                                }
+                            })
+                            .setNegativeButton("NO",null);
+                    AlertDialog alertDel = builder.create();
+                    alertDel.show();
+
+                    break;
+                case R.id.imbtnEditMov:
+                    goToEditMovimiento();
                     break;
             }
 
+        }
+
+        private void goToEditMovimiento(){
+            listMovimientoFragment.goToEditMovimiento( Integer.parseInt( txtIdMovimiento.getText().toString() )    );
         }
 
         private void deleteMovimiento() {

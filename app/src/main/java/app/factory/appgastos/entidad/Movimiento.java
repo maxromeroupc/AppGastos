@@ -11,6 +11,24 @@ public class Movimiento {
     private int idTipoMovimiento ;
     private double importe;
     private String descripcion;
+    private int idCategoria ;
+    private String Categoria;
+
+    public String getCategoria() {
+        return Categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        Categoria = categoria;
+    }
+
+    public int getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
+    }
 
     public String getDescripcion() {
         return descripcion;

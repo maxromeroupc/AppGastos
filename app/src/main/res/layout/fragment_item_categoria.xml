@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dim_margin_bottom_item_cardview"
+    app:cardBackgroundColor="@color/colorCardView"
+    app:cardCornerRadius="@dimen/dim_radius_item_cardview">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dim_margin_item_cardview"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txtIdCategoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="IdCategoria"
+             />
+
+        <TextView
+            android:id="@+id/txtCategoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dim_margin_item_cardview"
+            android:layout_weight="1"
+            android:text="Categoria"
+             />
+
+        <TextView
+            android:id="@+id/txtMontoMovCategoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dim_margin_item_cardview"
+            android:text="MontoMov"
+            />
+
+    </LinearLayout>
+
+
+
+</androidx.cardview.widget.CardView>

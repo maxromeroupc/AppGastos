@@ -35,6 +35,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Descripcion" />
+                <TextView
+                    android:id="@+id/txtCategoria"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Categoria" />
         </LinearLayout>
                 <LinearLayout
     android:orientation="horizontal"
@@ -76,6 +82,13 @@
             android:layout_weight="1"
             android:inputType="numberDecimal"
             android:text="Importe" />
+        <ImageButton
+            android:id="@+id/imbtnEditMov"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/edit_icon_blue"
+            android:background="@drawable/edit_icon_blue"
+            />
         <ImageButton
             android:id="@+id/imbtnDeleteMov"
             android:layout_width="wrap_content"

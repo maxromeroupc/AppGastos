@@ -48,7 +48,14 @@ public class EntidadAdapter extends RecyclerView.Adapter<EntidadAdapter.ViewHold
         holder.txtEntidad.setText( holder.oEntidad.getEntidad() );
         holder.txtFechaRegistro.setText( dateToString( holder.oEntidad.getFechaRegistro() ) );
         holder.txtEstado.setText( holder.oEntidad.getEstado() );
-
+        if( holder.oEntidad.getEstado().equalsIgnoreCase("A") ){
+            //holder.imgbtnActiveEntidad.setImageResource( R.drawable.check_icon_green_24 );
+            holder.imgbtnActiveEntidad.setBackgroundResource(R.drawable.check_icon_green_24);
+            //holder.imgbtnActiveEntidad.setBackgroundResource(@drawable/);
+        }else{
+            //holder.imgbtnActiveEntidad.setImageResource( R.drawable.check_icon_gray_24);
+            holder.imgbtnActiveEntidad.setBackgroundResource(R.drawable.check_icon_gray_24);
+        }
 
     }
 
@@ -73,7 +80,7 @@ public class EntidadAdapter extends RecyclerView.Adapter<EntidadAdapter.ViewHold
 
         private TextView txtIdEntidad, txtEntidad, txtFechaRegistro, txtEstado;
         private Entidad oEntidad;
-        private ImageButton imbtnEditEntidad;
+        private ImageButton imgbtnActiveEntidad;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -81,14 +88,14 @@ public class EntidadAdapter extends RecyclerView.Adapter<EntidadAdapter.ViewHold
             txtEntidad = itemView.findViewById(R.id.txtEntidad);
             txtFechaRegistro = itemView.findViewById(R.id.txtFechaRegistro);
             txtEstado = itemView.findViewById(R.id.txtEstado);
-            imbtnEditEntidad = itemView.findViewById(R.id.imbtnEditEntidad);
-            imbtnEditEntidad.setOnClickListener(this);
+            imgbtnActiveEntidad = itemView.findViewById(R.id.imgbtnActiveEntidad);
+            imgbtnActiveEntidad.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             switch(v.getId()){
-                case R.id.imbtnEditEntidad:
+                case R.id.imgbtnActiveEntidad:
                     setearEntidad();
                     break;
             }
