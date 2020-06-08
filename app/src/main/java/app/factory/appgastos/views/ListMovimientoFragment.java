@@ -91,11 +91,12 @@ public class ListMovimientoFragment extends Fragment implements View.OnClickList
         Movimiento mov = null;
         MovimientoDbHelper movimientoDbHelper = new MovimientoDbHelper(getContext());
         SQLiteDatabase database = movimientoDbHelper.getReadableDatabase();
-        String sql = "SELECT IdMovimiento, m.IdEntidad, IdTipoMovimiento, FechaMovimiento, m.Descripcion, Importe, " +
+        String sql = "SELECT IdMovimiento, m.IdEntidad, IdTipoMovimiento, m.FechaMovimiento, m.Descripcion, Importe, " +
                 " m.IdCategoria, Categoria FROM Movimiento m "
                 + " INNER JOIN Entidad e ON m.IdEntidad = e.IdEntidad "
                 + " LEFT JOIN Categoria c ON m.IdCategoria = c.IdCategoria "
-                + " WHERE e.Estado = 'A'";
+                + " WHERE e.Estado = 'A' "
+                + " ORDER BY m.FechaMovimiento ASC ";
 
         try {
             Cursor cursor = database.rawQuery( sql, null );
