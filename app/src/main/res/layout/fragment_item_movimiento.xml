@@ -25,22 +25,24 @@
 
                 <ImageView
                     android:id="@+id/imgIngresoGasto"
-                    android:layout_width="wrap_content"
+                    android:layout_width="12dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"></ImageView>
+                    android:layout_gravity="center">
 
+                </ImageView>
+                <TextView
+                    android:id="@+id/txtCategoria"
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dim_margin_item_cardview"
+                    android:text="Categoria" />
                 <TextView
                     android:id="@+id/txtDescripcion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:text="Descripcion" />
-                <TextView
-                    android:id="@+id/txtCategoria"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Categoria" />
+
         </LinearLayout>
                 <LinearLayout
     android:orientation="horizontal"
@@ -61,9 +63,8 @@
 
                         <TextView
             android:id="@+id/txtTipoMovimiento"
-            android:layout_width="wrap_content"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="TipoMov"
             android:visibility="gone"
             />
@@ -72,13 +73,15 @@
             android:id="@+id/txtFechaMovimiento"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginLeft="17dp"
+
             android:text="Fecha" />
 
                         <TextView
             android:id="@+id/txtImporte"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="right"
             android:layout_weight="1"
             android:inputType="numberDecimal"
             android:text="Importe" />
