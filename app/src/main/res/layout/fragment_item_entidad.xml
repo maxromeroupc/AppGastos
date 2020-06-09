@@ -94,10 +94,9 @@
                 android:src="@drawable/edit_icon_blue" />
 
             <ImageButton
-                android:id="@+id/imbtnDeleteEntidad"
+                android:id="@+id/imgbtnDeleteEntidad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:background="@drawable/trash_icon_red_24"
                 android:src="@drawable/trash_icon_red_24"
                 />

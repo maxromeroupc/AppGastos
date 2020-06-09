@@ -1,6 +1,8 @@
 package app.factory.appgastos.adapter;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -80,7 +82,7 @@ public class EntidadAdapter extends RecyclerView.Adapter<EntidadAdapter.ViewHold
 
         private TextView txtIdEntidad, txtEntidad, txtFechaRegistro, txtEstado;
         private Entidad oEntidad;
-        private ImageButton imgbtnActiveEntidad;
+        private ImageButton imgbtnActiveEntidad, imgbtnDeleteEntidad;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -89,6 +91,8 @@ public class EntidadAdapter extends RecyclerView.Adapter<EntidadAdapter.ViewHold
             txtFechaRegistro = itemView.findViewById(R.id.txtFechaRegistro);
             txtEstado = itemView.findViewById(R.id.txtEstado);
             imgbtnActiveEntidad = itemView.findViewById(R.id.imgbtnActiveEntidad);
+            imgbtnDeleteEntidad = itemView.findViewById(R.id.imgbtnDeleteEntidad);
+            imgbtnDeleteEntidad.setOnClickListener(this);
             imgbtnActiveEntidad.setOnClickListener(this);
         }
 
@@ -98,7 +102,36 @@ public class EntidadAdapter extends RecyclerView.Adapter<EntidadAdapter.ViewHold
                 case R.id.imgbtnActiveEntidad:
                     setearEntidad();
                     break;
+                case R.id.imgbtnDeleteEntidad:
+                    AlertDialog.Builder builder = new AlertDialog.Builder( itemView.getContext() );
+                    builder.setTitle("Confirmación")
+                            .setMessage("¿Seguro que desea eliminar el registro?")
+                            .setPositiveButton("SI", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    deleteEntidad();
+                                }
+                            })
+                            .setNegativeButton("NO", null);
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                    break;
             }
+        }
+
+        private void deleteEntidad() {
+            MovimientoDbHelper movDB = new MovimientoDbHelper(itemView.getContext());
+            SQLiteDatabase database = movDB.getWritableDatabase();
+            try {
+                database.delete(GastosDB.GastosColumnsDB.TABLE_NAME_ENTIDAD,
+                        "IdEntidad=?",
+                        new String[]{ txtIdEntidad.getText().toString() });
+                listEntidadFragment.refreshListEntidad();
+            }catch (Exception e){
+                Log.e("Error del Ent","Error elimando Entidad. Error: " + e.getMessage()  );
+            }
+
+
         }
 
         private void setearEntidad() {
