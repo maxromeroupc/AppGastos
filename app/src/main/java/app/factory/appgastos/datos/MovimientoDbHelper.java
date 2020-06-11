@@ -25,7 +25,7 @@ public class MovimientoDbHelper extends SQLiteOpenHelper {
                 + GastosDB.GastosColumnsDB.IdEntidad + " INTEGER NOT NULL,"
                 + GastosDB.GastosColumnsDB.IdCategoria + " INTEGER,"
                 + GastosDB.GastosColumnsDB.FechaMovimiento + " DATETIME NOT NULL," //"YYYY-MM-DD HH:MM:SS.SSS"
-                + GastosDB.GastosColumnsDB.IdTipoMovimiento + " VARCHAR(1) NOT NULL,"
+                + GastosDB.GastosColumnsDB.IdTipoMovimiento + " VARCHAR(1) NOT NULL," //Ingreso = 1; Gasto = 2
                 + GastosDB.GastosColumnsDB.Descripcion + " VARCHAR(100) NOT NULL,"
                 + GastosDB.GastosColumnsDB.Importe + " DECIMAL NOT NULL)"
 

@@ -243,6 +243,7 @@ public class AddMovimientoFragment extends Fragment implements View.OnClickListe
         String msgValidacion = validarRegistro();
         if(msgValidacion.equalsIgnoreCase("")) {
             saveMovimiento();
+            Toast.makeText(getContext(), "Registro guardado correctamente.", Toast.LENGTH_SHORT).show();
             goToListMovimiento();
             /* Mensaje de confirmacion
             AlertDialog.Builder alertConfirmBuilder = new AlertDialog.Builder(getContext());
@@ -345,14 +346,14 @@ public class AddMovimientoFragment extends Fragment implements View.OnClickListe
                 gloIdEntidad = 0; // por ahora solo hay 1 entidad de consulta
                 gloIdCategoria = idCategoria;
 
-                if (idTipoMovimiento.equalsIgnoreCase("I")) {
+                if (idTipoMovimiento.equalsIgnoreCase("1")) {
                     rdbIngreso.setChecked(true);
                 } else {
                     rdbGasto.setChecked(true);
                 }
                 edtxtDescripcionMovimiento.setText(curMov.getString(curMov.getColumnIndex("Descripcion")));
                 edtxtFechaMovimiento.setText(curMov.getString(curMov.getColumnIndex("FechaMovimiento")));
-                edtxtImporte.setText(String.valueOf(curMov.getInt(curMov.getColumnIndex("Importe"))));
+                edtxtImporte.setText(String.valueOf(curMov.getDouble(curMov.getColumnIndex("Importe"))));
             }
             db.close();
         } catch (Exception ex) {

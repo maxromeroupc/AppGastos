@@ -108,12 +108,15 @@ public class ListCategoriaFragment extends Fragment implements View.OnClickListe
         MovimientoDbHelper movimientoDbHelper = new MovimientoDbHelper(this.getContext());
         SQLiteDatabase database = movimientoDbHelper.getReadableDatabase();
         try {
-            Cursor curCateg = database.rawQuery("SELECT c.IdCategoria, c.Categoria, SUM(Importe) AS MontoMovimientoCategoria  " +
-                      " FROM Categoria c  "
-                    + " LEFT OUTER JOIN Movimiento m ON c.IdCategoria = m.IdCategoria "
-                    + " LEFT OUTER JOIN Entidad e ON e.IdEntidad= m.IdEntidad "
-                    + " WHERE c.Estado = 'A' "
-                    + " GROUP BY c.IdCategoria, c.Categoria "
+
+            Cursor curCateg = database.rawQuery("SELECT c.IdCategoria, c.Categoria,( SELECT ifnull(SUM( Importe ),0) " +
+                            " FROM Movimiento m " +
+                            "INNER JOIN Entidad e ON e.IdEntidad= m.IdEntidad and e.Estado = 'A'" +
+                            "WHERE m.IdCategoria = c.IdCategoria" +
+                            ") AS MontoMovimientoCategoria " +
+                            " FROM Categoria c  " +
+                            " WHERE c.Estado = 'A' " +
+                            " GROUP BY c.IdCategoria, c.Categoria"
                     , null);
 
             if ( curCateg.moveToFirst() ) {

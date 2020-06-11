@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,10 @@ import app.factory.appgastos.datos.MovimientoDbHelper;
 import app.factory.appgastos.entidad.Movimiento;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -92,13 +97,15 @@ public class ListMovimientoFragment extends Fragment implements View.OnClickList
         MovimientoDbHelper movimientoDbHelper = new MovimientoDbHelper(getContext());
         SQLiteDatabase database = movimientoDbHelper.getReadableDatabase();
         String sql = "SELECT IdMovimiento, m.IdEntidad, IdTipoMovimiento, m.FechaMovimiento, m.Descripcion, Importe, " +
-                " m.IdCategoria, Categoria FROM Movimiento m "
+                " m.IdCategoria, Categoria, substr(FechaMovimiento,1,2) as d, substr(FechaMovimiento,4,2) as m, substr(fechaMovimiento,7,4) as y FROM Movimiento m "
                 + " INNER JOIN Entidad e ON m.IdEntidad = e.IdEntidad "
                 + " LEFT JOIN Categoria c ON m.IdCategoria = c.IdCategoria "
                 + " WHERE e.Estado = 'A' "
-                + " ORDER BY m.FechaMovimiento ASC ";
+                + " ORDER BY y,m,d ";
 
         try {
+            //CopyDB(database.getPath());
+
             Cursor cursor = database.rawQuery( sql, null );
 
             if(cursor.moveToFirst()){
@@ -128,6 +135,34 @@ public class ListMovimientoFragment extends Fragment implements View.OnClickList
         }
 
         return lstMov;
+    }
+
+    private void CopyDB(String ruta){
+        File filDest = getActivity().getExternalFilesDir(Environment.getExternalStorageState());
+        filDest.getAbsolutePath();
+        String pathDestino = filDest.getAbsolutePath() + "/demoDB.bk";
+        //String pathDestino = "/storage/emulated/0/Android/data/demoDB.jpg";
+        File file = new File(ruta);
+        // /storage/emulated/0/Android/data/
+        try {
+            FileInputStream fis = new FileInputStream(file);
+            OutputStream os = new FileOutputStream(pathDestino);
+            byte[] b = new byte[1024];
+            int len;
+            while( (len = fis.read(b)) > 0 ){
+                os.write(b,0,len);
+            }
+
+            os.flush();
+            os.close();
+            fis.close();
+
+        }catch (Exception e){
+            Log.e("Error CopyDB","Error: " + e.getMessage());
+        }
+
+
+
     }
 
     private String formatMonto(double monto){
