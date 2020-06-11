@@ -17,9 +17,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,8 @@ public class ListCategoriaFragment extends Fragment implements View.OnClickListe
     private int mColumnCount = 1;
     private FloatingActionButton fabAddCategoria;
     private RecyclerView recListCategoria;
+    private TextView txtResumen;
+    private double gloTotalImporteIngreso, gloTotalImporteGasto ;
 
     public ListCategoriaFragment() {
     }
@@ -67,10 +71,25 @@ public class ListCategoriaFragment extends Fragment implements View.OnClickListe
         fabAddCategoria = view.findViewById(R.id.fabAddCategoria);
         fabAddCategoria.setOnClickListener(this);
         recListCategoria = view.findViewById(R.id.recListCategoria);
+        txtResumen = view.findViewById(R.id.txtResumen);
         // Set the adapter
+
         setRecViewCategoria();
 
+        setDefaultValues();
         return view;
+    }
+
+    private void setDefaultValues() {
+        double saldo = gloTotalImporteIngreso + gloTotalImporteGasto;
+        txtResumen.setText("I:" + formatMonto( gloTotalImporteIngreso )+
+                " - G:" + formatMonto(gloTotalImporteGasto )
+                + " - S:" + formatMonto(saldo) );
+    }
+
+    private String formatMonto(double monto){
+        DecimalFormat decimalFormat = new DecimalFormat("#,###.00");
+        return decimalFormat.format(monto);
     }
 
     @Override
@@ -109,10 +128,10 @@ public class ListCategoriaFragment extends Fragment implements View.OnClickListe
         SQLiteDatabase database = movimientoDbHelper.getReadableDatabase();
         try {
 
-            Cursor curCateg = database.rawQuery("SELECT c.IdCategoria, c.Categoria,( SELECT ifnull(SUM( Importe ),0) " +
+            Cursor curCateg = database.rawQuery("SELECT c.IdCategoria, c.Categoria,( SELECT ifnull(SUM( CASE WHEN IdTipoMovimiento = 1 THEN Importe ELSE Importe*-1 END ),0) " +
                             " FROM Movimiento m " +
                             "INNER JOIN Entidad e ON e.IdEntidad= m.IdEntidad and e.Estado = 'A'" +
-                            "WHERE m.IdCategoria = c.IdCategoria" +
+                            "WHERE m.IdCategoria = c.IdCategoria " +
                             ") AS MontoMovimientoCategoria " +
                             " FROM Categoria c  " +
                             " WHERE c.Estado = 'A' " +
@@ -125,6 +144,12 @@ public class ListCategoriaFragment extends Fragment implements View.OnClickListe
                     oCategoria.setIdCategoria( curCateg.getInt( curCateg.getColumnIndex("IdCategoria") )    );
                     oCategoria.setCategoria(curCateg.getString( curCateg.getColumnIndex("Categoria") ));
                     oCategoria.setMontoMovimientoCategoria(curCateg.getDouble( curCateg.getColumnIndex("MontoMovimientoCategoria") ));
+                    if( oCategoria.getMontoMovimientoCategoria() > 0){
+                        gloTotalImporteIngreso += oCategoria.getMontoMovimientoCategoria();
+                    }else{
+                        gloTotalImporteGasto += oCategoria.getMontoMovimientoCategoria();
+                    }
+
                     lstCategoria.add(oCategoria);
                 } while (curCateg.moveToNext());
             }

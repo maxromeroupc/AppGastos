@@ -64,7 +64,7 @@ public class AddMovimientoFragment extends Fragment implements View.OnClickListe
     private ImageButton imbtnFechaMovimiento, btnSave, btnCancel;
 
     private int gloIdMovimiento = 0, gloOptionMode = 1, gloIdEntidad = 0, gloIdCategoria = 0,
-            gloPositionCategoria = 0;
+            gloPositionCategoria = 0, gloPositionEntidad = 0;
     private final int MODE_OPTION_ADD = 1;
     private final int MODE_OPTION_EDIT = 2;
 
@@ -176,7 +176,7 @@ public class AddMovimientoFragment extends Fragment implements View.OnClickListe
         ArrayAdapter<Entidad> arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, lstEntidad);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnEntidad.setAdapter(arrayAdapter);
-        //spnEntidad.setSelection(gloIdEntidad);
+        spnEntidad.setSelection(gloPositionEntidad);
     }
 
     private void setSpnCategory() {
@@ -192,7 +192,7 @@ public class AddMovimientoFragment extends Fragment implements View.OnClickListe
         Entidad entidad = null;
         MovimientoDbHelper movimientoDbHelper = new MovimientoDbHelper(getContext());
         SQLiteDatabase database = movimientoDbHelper.getReadableDatabase();
-        String sql = "SELECT IdEntidad, Entidad, FechaRegistro, Estado FROM Entidad WHERE Estado = 'A'";
+        String sql = "SELECT IdEntidad, Entidad, FechaRegistro, Estado FROM Entidad ";
 
         try {
             Cursor cursor = database.rawQuery( sql, null );
@@ -202,12 +202,25 @@ public class AddMovimientoFragment extends Fragment implements View.OnClickListe
                     entidad = new Entidad();
                     entidad.setIdEntidad( cursor.getInt( cursor.getColumnIndex("IdEntidad") ) );
                     entidad.setEntidad( cursor.getString( cursor.getColumnIndex("Entidad") ) );
+                    entidad.setEstado( cursor.getString( cursor.getColumnIndex("Estado") )  );
+                    //Seteamos la entidad acctiva
+                    if( gloOptionMode == MODE_OPTION_ADD){
+                        if( entidad.getEstado().equalsIgnoreCase("A") )
+                        {
+                            gloPositionEntidad = cursor.getPosition();
+                        }
+                    }else if( gloOptionMode == MODE_OPTION_EDIT ){
+                        if(entidad.getIdEntidad() == gloIdEntidad){
+                            gloPositionEntidad = cursor.getPosition();
+                        }
+                    }
+
                     lstEntidad.add(entidad);
                 } while( cursor.moveToNext() );
             }
             database.close();
         }catch( Exception e){
-            Log.e("Error","Error listar movimiento. " + e.getMessage());
+            Log.e("Error","Error listar entidad movimiento. " + e.getMessage());
         }
         return lstEntidad;
     }
@@ -232,7 +245,7 @@ public class AddMovimientoFragment extends Fragment implements View.OnClickListe
                     lstCategoria.add(categoria);
                 }while(curCate.moveToNext());
             }
-
+            database.close();
         }catch( Exception e){
             Log.e("Error list mov","Error listar categoria. " + e.getMessage());
         }
@@ -343,7 +356,8 @@ public class AddMovimientoFragment extends Fragment implements View.OnClickListe
             if (curMov.moveToFirst()) {
                 String idTipoMovimiento = curMov.getString(curMov.getColumnIndex("IdTipoMovimiento"));
                 int idCategoria = curMov.getInt(curMov.getColumnIndex("IdCategoria"));
-                gloIdEntidad = 0; // por ahora solo hay 1 entidad de consulta
+                int idEntidad = curMov.getInt( curMov.getColumnIndex("IdEntidad"));
+                gloIdEntidad = idEntidad; // por ahora solo hay 1 entidad de consulta
                 gloIdCategoria = idCategoria;
 
                 if (idTipoMovimiento.equalsIgnoreCase("1")) {

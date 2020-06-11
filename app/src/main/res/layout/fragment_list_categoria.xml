@@ -26,6 +26,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         >
 
         <ScrollView
@@ -53,4 +54,13 @@
 
             />
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/txtResumen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dim_margin_item_cardview"
+        android:text="Resumen"
+        android:textColor="@color/colorPrimaryDark" />
+
 </LinearLayout>

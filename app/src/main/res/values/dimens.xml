@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="dim_margin_container">15dp</dimen>
+    <dimen name="dim_margin_container">10dp</dimen>
     <dimen name="dim_margin_item_cardview">5dp</dimen>
     <dimen name="dim_radius_item_cardview">5dp</dimen>
     <dimen name="dim_margin_bottom_item_cardview">1dp</dimen>
